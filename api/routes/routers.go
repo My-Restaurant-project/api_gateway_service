@@ -32,6 +32,5 @@ func (s *Server) InitRoutes(r *gin.Engine) {
 	{
 		restaurantGroup.GET("/:id")
 
-		restaurantGroup.GET("/search")
 	}
 }
