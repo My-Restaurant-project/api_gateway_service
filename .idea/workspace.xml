@@ -5,6 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="95bf871e-6323-4a3d-b090-15f0a9354d41" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/handlers/authetication.go" beforeDir="false" afterPath="$PROJECT_DIR$/api/handlers/authetication.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/protos" beforeDir="false" afterPath="$PROJECT_DIR$/protos" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/protos/authentication/authentication_service.proto" beforeDir="false" afterPath="$PROJECT_DIR$/protos/authentication/authentication_service.proto" afterDir="false" />
     </list>
@@ -15,7 +17,7 @@
   </component>
   <component name="GOROOT" url="file://$PROJECT_DIR$/../../../../pkg/mod/golang.org/toolchain@v0.0.1-go1.23rc1.linux-amd64" />
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/protos" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -24,12 +26,12 @@
     &quot;assignee&quot;: &quot;MuhammadAziz-GO&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "git@github.com:My-Restaurant-project/protos.git",
-    "accountId": "ec37f7ca-2caa-444e-96b1-21585d75f169"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:My-Restaurant-project/protos.git&quot;,
+    &quot;accountId&quot;: &quot;ec37f7ca-2caa-444e-96b1-21585d75f169&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
 }</component>
@@ -44,7 +46,7 @@
     "RunOnceActivity.go.formatter.settings.were.checked": "true",
     "RunOnceActivity.go.migrated.go.modules.settings": "true",
     "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
-    "git-widget-placeholder": "fac165a7",
+    "git-widget-placeholder": "main",
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
     "last_opened_file_path": "/home/muhammad/go/src/Github.com/Project-2/protos",

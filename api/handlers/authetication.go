@@ -68,7 +68,7 @@ func (h *authHandlerImpl) Login(c *gin.Context) {
 	// Return success response with token
 	c.JSON(http.StatusOK, gin.H{
 		"token": token,
-		"user": gin.H{
+		"Login": gin.H{
 			"Success": user.Success,
 			// Add other non-sensitive user details as needed
 		},
@@ -79,10 +79,13 @@ func (h *authHandlerImpl) Register(c *gin.Context) {
 	// Use the predefined auth.RegisterRequest type
 	var req auth.RegisterRequest
 	// Bind JSON request body to the struct
-	if err := c.ShouldBindJSON(&req); err != nil {
+	var profile auth.Profile
+
+	if err := c.ShouldBindJSON(&profile); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request format"})
 		return
 	}
+	req.Profile = &profile
 
 	// Validate the request (assuming auth.RegisterRequest doesn't have built-in validation)
 	if err := h.validateRegisterRequest(&req); err != nil {
@@ -153,7 +156,7 @@ func (h *authHandlerImpl) GetProfileId(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"profile": resp})
+	c.JSON(http.StatusOK, resp)
 }
 
 func (h *authHandlerImpl) generateJWT() (string, error) {
