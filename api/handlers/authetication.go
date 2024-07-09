@@ -138,7 +138,17 @@ func (h *authHandlerImpl) validateRegisterRequest(req *auth.RegisterRequest) err
 }
 
 func (h *authHandlerImpl) GetProfileId(c *gin.Context) {
-	// Implement get profile ID logic using h.aut/nhService
+	id := c.Param("id")
+	req := auth.UserIdRequest{
+		Id: id,
+	}
+
+	resp, err := h.authService.GetProfileById(c, &req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"profile": resp})
 }
 
 func (h *authHandlerImpl) generateJWT() (string, error) {
