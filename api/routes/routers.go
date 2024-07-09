@@ -27,10 +27,13 @@ func (s *Server) InitRoutes(r *gin.Engine) {
 		authGroup.POST("/login", s.Handlers.Login)
 		authGroup.POST("/register", s.Handlers.Register)
 	}
+	r.Use(gin.Recovery())
+	r.Use(gin.Logger())
 	
 	r.Use(middlewares.JWTMiddlewares)
-	
 	r.GET("auth/profile/:id", s.Handlers.GetProfileId)
+	
+
 	restaurantGroup := r.Group("/restaurant")
 	{
 		restaurantGroup.GET("/:id")

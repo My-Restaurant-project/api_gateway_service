@@ -28,5 +28,5 @@ func main() {
 
 	server.InitRoutes(mux)
 
-	mux.Run(":"+config.Load().SECRET_KEY)
+	mux.Run(":"+config.Load().URL_PORT)
 }

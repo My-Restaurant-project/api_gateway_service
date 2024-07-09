@@ -24,7 +24,6 @@ type authHandlerImpl struct {
 	authService auth.AuthenticationServiceClient
 }
 
-
 type Claims struct {
 	Email string `json:"email,omitempty"`
 	jwt.StandardClaims
@@ -139,11 +138,17 @@ func (h *authHandlerImpl) validateRegisterRequest(req *auth.RegisterRequest) err
 
 func (h *authHandlerImpl) GetProfileId(c *gin.Context) {
 	id := c.Param("id")
+	log.Println(id)
+	if id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+		return
+	}
+
 	req := auth.UserIdRequest{
 		Id: id,
 	}
 
-	resp, err := h.authService.GetProfileById(c, &req)
+	resp, err := h.authService.GetProfileById(context.Background(), &req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

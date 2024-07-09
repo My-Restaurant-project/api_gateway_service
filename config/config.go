@@ -21,7 +21,7 @@ func Load() Config {
 
 	config := Config{}
 	config.SECRET_KEY = cast.ToString(Coalesce("SECRET_KEY", "secret-key"))
-	config.URL_PORT = cast.ToString(Coalesce("URL_PORT", "8070"))
+	config.URL_PORT = cast.ToString(Coalesce("URL_PORT", "8081"))
 
 	return config
 }
