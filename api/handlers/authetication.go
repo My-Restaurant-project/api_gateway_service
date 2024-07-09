@@ -1,15 +1,16 @@
 package handler
 
 import (
+	"context"
 	"errors"
-	auth "github.com/Projects/Restaurant_Reservation_System/api_gateway/genproto/authentication_service"
-	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt"
-	_ "github.com/golang-jwt/jwt"
 	"log"
 	"net/http"
 	"strings"
 	"time"
+
+	auth "github.com/Projects/Restaurant_Reservation_System/api_gateway/genproto/authentication_service"
+	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt"
 )
 
 type authHandler interface {
@@ -41,9 +42,10 @@ func (h *authHandlerImpl) Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request format"})
 		return
 	}
+	log.Println(req.Email, req.Password)
 
 	// Authenticate user
-	user, err := h.authService.Login(c, &auth.LoginRequest{})
+	user, err := h.authService.Login(context.Background(), &auth.LoginRequest{Password: req.Password, Email: req.Email})
 	if err != nil {
 		// Handle different types of errors
 		switch {
@@ -57,7 +59,7 @@ func (h *authHandlerImpl) Login(c *gin.Context) {
 	}
 
 	// Generate JWT token
-	token, err := h.generateJWT(&auth.LoginRequest{})
+	token, err := h.generateJWT()
 	if err != nil {
 		log.Println("Failed to generate JWT", "error", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate authentication token"})
@@ -77,7 +79,6 @@ func (h *authHandlerImpl) Login(c *gin.Context) {
 func (h *authHandlerImpl) Register(c *gin.Context) {
 	// Use the predefined auth.RegisterRequest type
 	var req auth.RegisterRequest
-
 	// Bind JSON request body to the struct
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request format"})
@@ -90,6 +91,7 @@ func (h *authHandlerImpl) Register(c *gin.Context) {
 		return
 	}
 
+	log.Println(req.Profile)
 	// Register the user
 	user, err := h.authService.Register(c, &req)
 	if err != nil {
@@ -112,14 +114,13 @@ func (h *authHandlerImpl) Register(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{
 		"message": "User registered successfully",
 		"user": gin.H{
-			"id": &user.Profile.Id,
-			"username": user.Profile.Name,
-			"email":    user.Profile.Email,
-			"password": user.Profile.Password,
-			"role": user.Profile.Role,
+			"id":         &user.Profile.Id,
+			"username":   user.Profile.Name,
+			"email":      user.Profile.Email,
+			"password":   user.Profile.Password,
+			"role":       user.Profile.Role,
 			"created_at": time.Now(),
 			"updated_at": time.Now(),
-
 		},
 	})
 }
@@ -140,7 +141,7 @@ func (h *authHandlerImpl) GetProfileId(c *gin.Context) {
 	// Implement get profile ID logic using h.aut/nhService
 }
 
-func (h *authHandlerImpl) generateJWT(user *auth.LoginRequest) (string, error) {
+func (h *authHandlerImpl) generateJWT() (string, error) {
 	expirationTime := time.Now().Add(24 * time.Hour)
 	claims := &jwt.StandardClaims{
 
