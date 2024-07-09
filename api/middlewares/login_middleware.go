@@ -13,9 +13,8 @@ import (
 
 
 func JWTMiddlewares(ctx *gin.Context) {
-	config.Load()
+	jwtKey := []byte(config.Load().SECRET_KEY)
 	tokenString := ctx.GetHeader("Authorization")
-	var jwtKey = []byte("secret-key")
 
 	if !strings.HasPrefix(tokenString, "Bearer ") {
 		ctx.JSON(401, gin.H{"error": "token not found"})

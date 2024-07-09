@@ -2,6 +2,7 @@ package routes
 
 import (
 	handler "github.com/Projects/Restaurant_Reservation_System/api_gateway/api/handlers"
+	"github.com/Projects/Restaurant_Reservation_System/api_gateway/api/middlewares"
 	"github.com/gin-gonic/gin"
 )
 
@@ -25,9 +26,11 @@ func (s *Server) InitRoutes(r *gin.Engine) {
 	{
 		authGroup.POST("/login", s.Handlers.Login)
 		authGroup.POST("/register", s.Handlers.Register)
-		authGroup.GET("/profile", s.Handlers.GetProfileId)
 	}
-
+	
+	r.Use(middlewares.JWTMiddlewares)
+	
+	r.GET("auth/profile/:id", s.Handlers.GetProfileId)
 	restaurantGroup := r.Group("/restaurant")
 	{
 		restaurantGroup.GET("/:id")

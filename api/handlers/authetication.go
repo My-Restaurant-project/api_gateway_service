@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Projects/Restaurant_Reservation_System/api_gateway/config"
 	auth "github.com/Projects/Restaurant_Reservation_System/api_gateway/genproto/authentication_service"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
@@ -23,7 +24,6 @@ type authHandlerImpl struct {
 	authService auth.AuthenticationServiceClient
 }
 
-var jwtSecret = []byte("secret-key")
 
 type Claims struct {
 	Email string `json:"email,omitempty"`
@@ -159,5 +159,5 @@ func (h *authHandlerImpl) generateJWT() (string, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(jwtSecret)
+	return token.SignedString([]byte(config.Load().SECRET_KEY))
 }

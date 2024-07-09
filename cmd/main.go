@@ -5,6 +5,7 @@ import (
 
 	handler "github.com/Projects/Restaurant_Reservation_System/api_gateway/api/handlers"
 	"github.com/Projects/Restaurant_Reservation_System/api_gateway/api/routes"
+	"github.com/Projects/Restaurant_Reservation_System/api_gateway/config"
 	"github.com/Projects/Restaurant_Reservation_System/api_gateway/genproto/authentication_service"
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
@@ -27,5 +28,5 @@ func main() {
 
 	server.InitRoutes(mux)
 
-	mux.Run(":8070")
+	mux.Run(":"+config.Load().SECRET_KEY)
 }
