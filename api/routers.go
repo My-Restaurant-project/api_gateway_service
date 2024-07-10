@@ -42,7 +42,7 @@ func (s *Server) InitRoutes(r *gin.Engine) {
 
 	restaurantGroup := r.Group("/restaurant")
 	{
+		restaurantGroup.POST("/", s.Handlers.CreateRestaurant)
 		restaurantGroup.GET("/:id")
-		restaurantGroup.POST()
 	}
 }

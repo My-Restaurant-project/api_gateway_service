@@ -2,6 +2,7 @@ package handler
 
 import (
 	auth "api_gateway/genproto/authentication_service"
+	rese "api_gateway/genproto/reservation_service"
 )
 
 func NewAuthHandler(authSer auth.AuthenticationServiceClient) authHandler {
@@ -10,9 +11,11 @@ func NewAuthHandler(authSer auth.AuthenticationServiceClient) authHandler {
 
 type Handlers struct {
 	authHandler
+	reservationHandler
 }
 
-func NewHandlers(authSer auth.AuthenticationServiceClient) *Handlers {
+func NewHandlers(authSer auth.AuthenticationServiceClient, reser rese.ReservationServiceClient) *Handlers {
 	auth := NewAuthHandler(authSer)
-	return &Handlers{authHandler: auth}
+	res := NewReservationHandler(reser)
+	return &Handlers{authHandler: auth, reservationHandler: res}
 }
