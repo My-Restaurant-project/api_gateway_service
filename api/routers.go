@@ -25,16 +25,19 @@ func (s *Server) InitRoutes(r *gin.Engine) {
 		c.JSON(200, gin.H{"message": "pong"})
 	})
 
+	auth := s.Handlers.Auth()
+
 	authGroup := r.Group("/auth")
 	{
-		authGroup.POST("/login", s.Handlers.Auth().Login)
-		authGroup.POST("/register", s.Handlers.Auth().Register)
+		authGroup.POST("/login", auth.Login)
+		authGroup.POST("/register", auth.Register)
 	}
+
 	r.Use(gin.Recovery())
 	r.Use(gin.Logger())
 
 	r.Use(middlewares.JWTMiddlewares)
-	r.GET("/auth/profile/:id", s.Handlers.Auth().GetProfileId)
+	r.GET("/auth/profile/:id", auth.GetProfileId)
 
 	reservation := s.Handlers.Reservation()
 
