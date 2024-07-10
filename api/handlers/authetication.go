@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"api_gateway/config"
 	"context"
 	"errors"
 	"log"
@@ -8,9 +9,10 @@ import (
 	"strings"
 	"time"
 
-	_ "github.com/Projects/Restaurant_Reservation_System/api_gateway/api/docs" // This is important for the generated documentation to work
+	_ "api_gateway/api/docs" // This is important for the generated documentation to work
 
-	auth "github.com/Projects/Restaurant_Reservation_System/api_gateway/genproto/authentication_service"
+	auth "api_gateway/genproto/authentication_service"
+
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 )
@@ -24,8 +26,6 @@ type authHandler interface {
 type authHandlerImpl struct {
 	authService auth.AuthenticationServiceClient
 }
-
-var jwtSecret = []byte("secret-key")
 
 type Claims struct {
 	Email string `json:"email,omitempty"`
@@ -83,7 +83,7 @@ func (h *authHandlerImpl) Login(c *gin.Context) {
 	// Return success response with token
 	c.JSON(http.StatusOK, gin.H{
 		"token": token,
-		"user": gin.H{
+		"Login": gin.H{
 			"Success": user.Success,
 			// Add other non-sensitive user details as needed
 		},
@@ -94,10 +94,13 @@ func (h *authHandlerImpl) Register(c *gin.Context) {
 	// Use the predefined auth.RegisterRequest type
 	var req auth.RegisterRequest
 	// Bind JSON request body to the struct
-	if err := c.ShouldBindJSON(&req); err != nil {
+	var profile auth.Profile
+
+	if err := c.ShouldBindJSON(&profile); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request format"})
 		return
 	}
+	req.Profile = &profile
 
 	// Validate the request (assuming auth.RegisterRequest doesn't have built-in validation)
 	if err := h.validateRegisterRequest(&req); err != nil {
@@ -152,7 +155,23 @@ func (h *authHandlerImpl) validateRegisterRequest(req *auth.RegisterRequest) err
 }
 
 func (h *authHandlerImpl) GetProfileId(c *gin.Context) {
-	// Implement get profile ID logic using h.aut/nhService
+	id := c.Param("id")
+	log.Println(id)
+	if id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+		return
+	}
+
+	req := auth.UserIdRequest{
+		Id: id,
+	}
+
+	resp, err := h.authService.GetProfileById(context.Background(), &req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, resp)
 }
 
 func (h *authHandlerImpl) generateJWT() (string, error) {
@@ -163,5 +182,5 @@ func (h *authHandlerImpl) generateJWT() (string, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(jwtSecret)
+	return token.SignedString([]byte(config.Load().SECRET_KEY))
 }

@@ -1,7 +1,7 @@
 package handler
 
 import (
-	auth "github.com/Projects/Restaurant_Reservation_System/api_gateway/genproto/authentication_service"
+	auth "api_gateway/genproto/authentication_service"
 )
 
 func NewAuthHandler(authSer auth.AuthenticationServiceClient) authHandler {

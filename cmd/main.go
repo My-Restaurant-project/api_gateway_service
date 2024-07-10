@@ -3,9 +3,11 @@ package main
 import (
 	"log"
 
-	api "github.com/Projects/Restaurant_Reservation_System/api_gateway/api"
-	handler "github.com/Projects/Restaurant_Reservation_System/api_gateway/api/handlers"
-	"github.com/Projects/Restaurant_Reservation_System/api_gateway/genproto/authentication_service"
+	api "api_gateway/api"
+	handler "api_gateway/api/handlers"
+	"api_gateway/config"
+	"api_gateway/genproto/authentication_service"
+
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -27,5 +29,5 @@ func main() {
 
 	server.InitRoutes(mux)
 
-	mux.Run(":8070")
+	mux.Run(":" + config.Load().URL_PORT)
 }

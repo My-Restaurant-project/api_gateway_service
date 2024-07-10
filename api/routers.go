@@ -1,8 +1,10 @@
 package api
 
 import (
-	_ "github.com/Projects/Restaurant_Reservation_System/api_gateway/api/docs"
-	handler "github.com/Projects/Restaurant_Reservation_System/api_gateway/api/handlers"
+	_ "api_gateway/api/docs"
+	handler "api_gateway/api/handlers"
+	"api_gateway/api/middlewares"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -30,6 +32,11 @@ func (s *Server) InitRoutes(r *gin.Engine) {
 		authGroup.POST("/login", s.Handlers.Login)
 		authGroup.POST("/register", s.Handlers.Register)
 	}
+	r.Use(gin.Recovery())
+	r.Use(gin.Logger())
+
+	r.Use(middlewares.JWTMiddlewares)
+	r.GET("auth/profile/:id", s.Handlers.GetProfileId)
 
 	r.GET("/auth/profile/:id", s.Handlers.GetProfileId)
 
