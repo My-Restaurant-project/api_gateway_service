@@ -6,7 +6,8 @@ import (
 	api "api_gateway/api"
 	handler "api_gateway/api/handlers"
 	"api_gateway/config"
-	"api_gateway/genproto/authentication_service"
+	auth "api_gateway/genproto/authentication_service"
+	reser "api_gateway/genproto/reservation_service"
 
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
@@ -20,9 +21,17 @@ func main() {
 	if err != nil {
 		log.Fatal("Failed to connecting to authenication service: ", err)
 	}
-	authClient := authentication_service.NewAuthenticationServiceClient(authServerConn)
 
-	handlers := handler.NewHandlers(authClient)
+	reserServerConn, err := grpc.NewClient("localhost:50052", grpc.WithTransportCredentials(insecure.NewCredentials()))
+
+	if err != nil {
+		log.Fatal("Failed to connecting to authenication service: ", err)
+	}
+
+	authClient := auth.NewAuthenticationServiceClient(authServerConn)
+	reservationClinet := reser.NewReservationServiceClient(reserServerConn)
+
+	handlers := handler.NewHandlers(authClient, reservationClinet)
 	log.Println("Starting API Gateway...")
 
 	server := api.NewServer(handlers)
