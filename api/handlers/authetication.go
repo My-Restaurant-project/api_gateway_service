@@ -1,22 +1,3 @@
-// package handler
-
-// import (
-// 	"api_gateway/config"
-// 	"context"
-// 	"errors"
-// 	"log"
-// 	"net/http"
-// 	"strings"
-// 	"time"
-
-// 	_ "api_gateway/api/docs" // This is important for the generated documentation to work
-
-// 	auth "api_gateway/genproto/authentication_service"
-
-// 	"github.com/gin-gonic/gin"
-// 	"github.com/golang-jwt/jwt"
-// )
-
 package handler
 
 import (

@@ -1,17 +1,3 @@
-// package handler
-
-// import (
-// 	rese "api_gateway/genproto/reservation_service"
-// )
-
-// type reservationHandlerImpl struct {
-// 	reservationService rese.ReservationServiceClient
-// }
-
-// func NewReservationHandler(restaurantService rese.ReservationServiceClient) reservationHandler {
-// 	return &reservationHandlerImpl{restaurantService: restaurantService}
-// }
-
 package handler
 
 import (
