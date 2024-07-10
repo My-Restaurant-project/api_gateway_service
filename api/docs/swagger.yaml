@@ -1,4 +1,55 @@
+host: localhost:8070
 info:
   contact: {}
-paths: {}
+  description: This is a sample server for a restaurant reservation system.
+  title: Restaurant Reservation System API
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: User inserts their credentials like email and password
+      parameters:
+      - description: example@gmail.com
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      - description: exmaplePassword2024
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Login and Getting Token
+      tags:
+      - Login
 swagger: "2.0"

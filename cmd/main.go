@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
+	api "github.com/Projects/Restaurant_Reservation_System/api_gateway/api"
 	handler "github.com/Projects/Restaurant_Reservation_System/api_gateway/api/handlers"
-	"github.com/Projects/Restaurant_Reservation_System/api_gateway/api/routes"
 	"github.com/Projects/Restaurant_Reservation_System/api_gateway/genproto/authentication_service"
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
@@ -23,7 +23,7 @@ func main() {
 	handlers := handler.NewHandlers(authClient)
 	log.Println("Starting API Gateway...")
 
-	server := routes.NewServer(handlers)
+	server := api.NewServer(handlers)
 
 	server.InitRoutes(mux)
 

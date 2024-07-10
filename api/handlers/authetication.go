@@ -8,6 +8,8 @@ import (
 	"strings"
 	"time"
 
+	_ "github.com/Projects/Restaurant_Reservation_System/api_gateway/api/docs" // This is important for the generated documentation to work
+
 	auth "github.com/Projects/Restaurant_Reservation_System/api_gateway/genproto/authentication_service"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
@@ -30,6 +32,18 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
+// @Summary Login and Getting Token
+// @Description User inserts their credentials like email and password
+// @Tags Login
+// @Accept  json
+// @Produce  json
+// @Param email body string true "example@gmail.com"
+// @Param password body string true "exmaplePassword2024"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]string
+// @Failure 401 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /auth/login [post]
 func (h *authHandlerImpl) Login(c *gin.Context) {
 	// Define a struct for the login request
 	var req struct {
