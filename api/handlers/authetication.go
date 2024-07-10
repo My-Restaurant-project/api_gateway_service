@@ -1,7 +1,27 @@
+// package handler
+
+// import (
+// 	"api_gateway/config"
+// 	"context"
+// 	"errors"
+// 	"log"
+// 	"net/http"
+// 	"strings"
+// 	"time"
+
+// 	_ "api_gateway/api/docs" // This is important for the generated documentation to work
+
+// 	auth "api_gateway/genproto/authentication_service"
+
+// 	"github.com/gin-gonic/gin"
+// 	"github.com/golang-jwt/jwt"
+// )
+
 package handler
 
 import (
 	"api_gateway/config"
+	auth "api_gateway/genproto/authentication_service"
 	"context"
 	"errors"
 	"log"
@@ -9,15 +29,16 @@ import (
 	"strings"
 	"time"
 
-	_ "api_gateway/api/docs" // This is important for the generated documentation to work
-
-	auth "api_gateway/genproto/authentication_service"
-
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 )
 
-type authHandler interface {
+type Claims struct {
+	Email string `json:"email,omitempty"`
+	jwt.StandardClaims
+}
+
+type AuthHandler interface {
 	Login(c *gin.Context)
 	Register(c *gin.Context)
 	GetProfileId(c *gin.Context)
@@ -27,9 +48,8 @@ type authHandlerImpl struct {
 	authService auth.AuthenticationServiceClient
 }
 
-type Claims struct {
-	Email string `json:"email,omitempty"`
-	jwt.StandardClaims
+func NewAuthHandler(authSer auth.AuthenticationServiceClient) AuthHandler {
+	return &authHandlerImpl{authService: authSer}
 }
 
 // @Summary Login and Getting Token
