@@ -12,7 +12,6 @@ import (
 // @version 1.0
 // @description This is a sample server for a restaurant reservation system.
 // @host localhost:8070
-
 type Server struct {
 	Handlers handler.Handlers
 }
@@ -37,22 +36,33 @@ func (s *Server) InitRoutes(r *gin.Engine) {
 	r.Use(middlewares.JWTMiddlewares)
 	r.GET("/auth/profile/:id", s.Handlers.Auth().GetProfileId)
 
+	reservation := s.Handlers.Reservation()
+
 	restaurantGroup := r.Group("/restaurant")
 	{
-		restaurantGroup.POST("/", s.Handlers.Reservation().CreateRestaurant)
-		restaurantGroup.GET("/:id", s.Handlers.Reservation().GetRestaurant)
-		restaurantGroup.PUT("/:id", s.Handlers.Reservation().UpdateRestaurant)
-		restaurantGroup.DELETE("/:id", s.Handlers.Reservation().DeleteRestaurant)
-		restaurantGroup.GET("/", s.Handlers.Reservation().GetRestaurants)
+		restaurantGroup.POST("/", reservation.CreateRestaurant)
+		restaurantGroup.GET("/:id", reservation.GetRestaurant)
+		restaurantGroup.PUT("/:id", reservation.UpdateRestaurant)
+		restaurantGroup.DELETE("/:id", reservation.DeleteRestaurant)
+		restaurantGroup.GET("/", reservation.GetRestaurants)
 	}
 	reservationGroup := r.Group("/reservation")
 	{
-		reservationGroup.POST("/", s.Handlers.Reservation().CreateReservation)
-		reservationGroup.GET("/:id", s.Handlers.Reservation().GetReservation)
-		reservationGroup.PUT("/:id", s.Handlers.Reservation().UpdateReservation)
-		reservationGroup.DELETE("/:id", s.Handlers.Reservation().DeleteReservation)
-		reservationGroup.GET("/", s.Handlers.Reservation().GetReservations)
-		reservationGroup.POST("/check", s.Handlers.Reservation().CheckReservation)
-		reservationGroup.POST("/order", s.Handlers.Reservation().CreateReservationOrder)
+		reservationGroup.POST("/", reservation.CreateReservation)
+		reservationGroup.GET("/:id", reservation.GetReservation)
+		reservationGroup.PUT("/:id", reservation.UpdateReservation)
+		reservationGroup.DELETE("/:id", reservation.DeleteReservation)
+		reservationGroup.GET("/", reservation.GetReservations)
+		reservationGroup.POST("/check", reservation.CheckReservation)
+		reservationGroup.POST("/order", reservation.CreateReservationOrder)
 	}
+	menuGroup := r.Group("/menu")
+	{
+		menuGroup.POST("/", reservation.AddMenu)
+		menuGroup.GET("/:id", reservation.GetMenu)
+		menuGroup.PUT("/:id", reservation.UpdateMenu)
+		menuGroup.DELETE("/:id", reservation.DeleteMenu)
+		menuGroup.GET("/", reservation.GetMenus)
+	}
+
 }

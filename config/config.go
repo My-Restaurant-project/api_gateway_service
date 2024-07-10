@@ -3,7 +3,6 @@ package config
 import (
 	"fmt"
 	"os"
-	
 
 	"github.com/joho/godotenv"
 	"github.com/spf13/cast"
@@ -21,7 +20,7 @@ func Load() Config {
 
 	config := Config{}
 	config.SECRET_KEY = cast.ToString(Coalesce("SECRET_KEY", "secret-key"))
-	config.URL_PORT = cast.ToString(Coalesce("URL_PORT", "8081"))
+	config.URL_PORT = cast.ToString(Coalesce("URL_PORT", "8080"))
 
 	return config
 }

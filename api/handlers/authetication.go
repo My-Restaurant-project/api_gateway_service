@@ -46,23 +46,18 @@ func NewAuthHandler(authSer auth.AuthenticationServiceClient) AuthHandler {
 // @Failure 500 {object} map[string]string
 // @Router /auth/login [post]
 func (h *authHandlerImpl) Login(c *gin.Context) {
-	// Define a struct for the login request
 	var req struct {
 		Email    string `json:"email" binding:"required,email"`
 		Password string `json:"password" binding:"required,min=6"`
 	}
 
-	// Bind JSON request body to the struct
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request format"})
 		return
 	}
-	log.Println(req.Email, req.Password)
 
-	// Authenticate user
 	user, err := h.authService.Login(context.Background(), &auth.LoginRequest{Password: req.Password, Email: req.Email})
 	if err != nil {
-		// Handle different types of errors
 		switch {
 		case errors.Is(err, errors.New("ErrorInvalid credentials")):
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
@@ -73,7 +68,6 @@ func (h *authHandlerImpl) Login(c *gin.Context) {
 		return
 	}
 
-	// Generate JWT token
 	token, err := h.generateJWT()
 	if err != nil {
 		log.Println("Failed to generate JWT", "error", err)
@@ -81,20 +75,16 @@ func (h *authHandlerImpl) Login(c *gin.Context) {
 		return
 	}
 
-	// Return success response with token
 	c.JSON(http.StatusOK, gin.H{
 		"token": token,
 		"Login": gin.H{
 			"Success": user.Success,
-			// Add other non-sensitive user details as needed
 		},
 	})
 }
 
 func (h *authHandlerImpl) Register(c *gin.Context) {
-	// Use the predefined auth.RegisterRequest type
 	var req auth.RegisterRequest
-	// Bind JSON request body to the struct
 	var profile auth.Profile
 
 	if err := c.ShouldBindJSON(&profile); err != nil {
@@ -103,17 +93,13 @@ func (h *authHandlerImpl) Register(c *gin.Context) {
 	}
 	req.Profile = &profile
 
-	// Validate the request (assuming auth.RegisterRequest doesn't have built-in validation)
 	if err := h.validateRegisterRequest(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	log.Println(req.Profile)
-	// Register the user
 	user, err := h.authService.Register(c, &req)
 	if err != nil {
-		// Handle different types of errors
 		switch {
 		case strings.Contains(err.Error(), "already exists"):
 			c.JSON(http.StatusConflict, gin.H{"error": "User with this email already exists"})
@@ -128,7 +114,6 @@ func (h *authHandlerImpl) Register(c *gin.Context) {
 		return
 	}
 
-	// Return success response with token and user details
 	c.JSON(http.StatusCreated, gin.H{
 		"message": "User registered successfully",
 		"user": gin.H{
@@ -143,7 +128,6 @@ func (h *authHandlerImpl) Register(c *gin.Context) {
 	})
 }
 
-// Validation function (if needed)
 func (h *authHandlerImpl) validateRegisterRequest(req *auth.RegisterRequest) error {
 	if len(req.Profile.Name) < 3 || len(req.Profile.Name) > 30 {
 		return errors.New("username must be between 3 and 30 characters")
@@ -151,7 +135,6 @@ func (h *authHandlerImpl) validateRegisterRequest(req *auth.RegisterRequest) err
 	if len(req.Profile.Password) < 8 {
 		return errors.New("password must be at least 8 characters")
 	}
-	// Add more validation as needed
 	return nil
 }
 
