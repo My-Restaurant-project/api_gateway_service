@@ -23,6 +23,13 @@ definitions:
       updated_at:
         type: string
     type: object
+  models.CheckReservationFilter:
+    properties:
+      reservation_id string:
+        type: string
+      user_id string:
+        type: string
+    type: object
   reservation_service.AddReservationRequest:
     properties:
       reservation_time:
@@ -43,6 +50,28 @@ definitions:
       name:
         type: string
       phone_number:
+        type: string
+    type: object
+  reservation_service.GetReservationsRequest:
+    properties:
+      restaurant_id:
+        type: string
+      status:
+        type: string
+      user_id:
+        type: string
+    type: object
+  reservation_service.UpdateReservationRequest:
+    properties:
+      id:
+        type: string
+      reservation_time:
+        type: string
+      restaurant_id:
+        type: string
+      status:
+        type: string
+      user_id:
         type: string
     type: object
   reservation_service.UpdateRestaurantRequest:
@@ -192,6 +221,13 @@ paths:
       consumes:
       - application/json
       description: Geting all reservation
+      parameters:
+      - description: Get all reservation
+        in: body
+        name: GetReservationsRequest
+        required: true
+        schema:
+          $ref: '#/definitions/reservation_service.GetReservationsRequest'
       produces:
       - application/json
       responses:
@@ -259,6 +295,171 @@ paths:
               type: string
             type: object
       summary: Add new reservation
+      tags:
+      - Reservation
+  /reservation/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete reservation information using reservation ID
+      parameters:
+      - description: Reservation ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete reservation by ID
+      tags:
+      - Reservation
+    get:
+      consumes:
+      - application/json
+      description: Get reservation information using reservation ID
+      parameters:
+      - description: Reservation ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get reservation by ID
+      tags:
+      - Reservation
+    put:
+      consumes:
+      - application/json
+      description: Update reservation information using reservation ID
+      parameters:
+      - description: Reservation ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updating reservation
+        in: body
+        name: UpdateReservationRequest
+        required: true
+        schema:
+          $ref: '#/definitions/reservation_service.UpdateReservationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update reservation by ID
+      tags:
+      - Reservation
+  /reservation/check:
+    post:
+      consumes:
+      - application/json
+      description: Can check Reservation availability via ids
+      parameters:
+      - description: Check Reservation
+        in: body
+        name: check
+        required: true
+        schema:
+          $ref: '#/definitions/models.CheckReservationFilter'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Checking Reservation Availability
       tags:
       - Reservation
   /restaurant/:

@@ -73,7 +73,7 @@ type ReservationHandler interface {
 // @Tags Reservation
 // @Accept  json
 // @Produce  json
-// @Param check body models.CheckReservation true "Check Reservation"
+// @Param check body models.CheckReservationFilter true "Check Reservation"
 // @Success 200 {object} map[string]interface{}
 // @Failure 400 {object} map[string]string
 // @Failure 401 {object} map[string]string
@@ -113,8 +113,8 @@ func (r *reservationHandlerImpl) CheckReservation(ctx *gin.Context) {
 func (r *reservationHandlerImpl) CreateReservationOrder(ctx *gin.Context) {}
 func (r *reservationHandlerImpl) PayForReservation(ctx *gin.Context)      {}
 
-func (r *reservationHandlerImpl) AddMenu(ctx *gin.Context)    {}
-func (r *reservationHandlerImpl) GetMenus(ctx *gin.Context)   {}
-func (r *reservationHandlerImpl) GetMenu(ctx *gin.Context)    {}
-func (r *reservationHandlerImpl) UpdateMenu(ctx *gin.Context) {}
-func (r *reservationHandlerImpl) DeleteMenu(ctx *gin.Context) {}
+// func (r *reservationHandlerImpl) AddMenu(ctx *gin.Context)    {}
+// func (r *reservationHandlerImpl) GetMenus(ctx *gin.Context)   {}
+// func (r *reservationHandlerImpl) GetMenu(ctx *gin.Context)    {}
+// func (r *reservationHandlerImpl) UpdateMenu(ctx *gin.Context) {}
+// func (r *reservationHandlerImpl) DeleteMenu(ctx *gin.Context) {}

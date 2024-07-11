@@ -59,6 +59,18 @@ func (r *reservationHandlerImpl) GetReservations(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "Reservations retrieved successfully", "reservations": getResRes.Reservations})
 }
 
+// @
+// @Summary Get reservation by ID
+// @Description Get reservation information using reservation ID
+// @Tags Reservation
+// @Accept  json
+// @Produce  json
+// @Param id path string true "Reservation ID"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /reservation/{id} [get]
 func (r *reservationHandlerImpl) GetReservation(ctx *gin.Context) {
 	id := ctx.Param("id")
 
@@ -72,6 +84,19 @@ func (r *reservationHandlerImpl) GetReservation(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "Reservation retrieved successfully", "reservation": getResRes})
 }
 
+//@ 
+// @Summary Update reservation by ID
+// @Description Update reservation information using reservation ID
+// @Tags Reservation
+// @Accept  json
+// @Produce  json
+// @Param id path string true "Reservation ID"
+// @Param UpdateReservationRequest body reservation_service.UpdateReservationRequest true "Updating reservation"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /reservation/{id} [put]
 func (r *reservationHandlerImpl) UpdateReservation(ctx *gin.Context) {
 	id := ctx.Param("id")
 
@@ -92,6 +117,17 @@ func (r *reservationHandlerImpl) UpdateReservation(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "Reservation updated successfully", "reservation": updateResRes.Reservation})
 }
 
+// @Summary Delete reservation by ID
+// @Description Delete reservation information using reservation ID
+// @Tags Reservation
+// @Accept  json
+// @Produce  json
+// @Param id path string true "Reservation ID"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /reservation/{id} [delete]
 func (r *reservationHandlerImpl) DeleteReservation(ctx *gin.Context) {
 	id := ctx.Param("id")
 
