@@ -34,6 +34,19 @@ definitions:
       phone_number:
         type: string
     type: object
+  reservation_service.UpdateRestaurantRequest:
+    properties:
+      address:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      phone_number:
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -164,6 +177,39 @@ paths:
       tags:
       - Authentication
   /restaurant/:
+    get:
+      consumes:
+      - application/json
+      description: Geting all restaurant
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get all restaurant
+      tags:
+      - Restaurant
     post:
       consumes:
       - application/json
@@ -202,6 +248,91 @@ paths:
               type: string
             type: object
       summary: Add new restaurant
+      tags:
+      - Restaurant
+  /restaurant/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get restaurant information using restaurant ID
+      parameters:
+      - description: Restaurant ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get restaurant by ID
+      tags:
+      - Restaurant
+    put:
+      consumes:
+      - application/json
+      description: Update restaurant information using restaurant ID
+      parameters:
+      - description: Restaurant ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updating restaurant
+        in: body
+        name: UpdateRestaurantRequest
+        required: true
+        schema:
+          $ref: '#/definitions/reservation_service.UpdateRestaurantRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update restaurant by ID
       tags:
       - Restaurant
 swagger: "2.0"

@@ -67,6 +67,7 @@ type ReservationHandler interface {
 }
 
 func (r *reservationHandlerImpl) CheckReservation(ctx *gin.Context) {
+
 	// need to implement checkReservation
 	// var gResOrdReq rese.ReservationOrder
 	// ctx.BindJSON()

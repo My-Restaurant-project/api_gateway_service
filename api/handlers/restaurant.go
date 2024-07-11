@@ -36,6 +36,16 @@ func (r *reservationHandlerImpl) CreateRestaurant(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, gin.H{"message": "Restaurant added successfully", "restaurant": addRestRes})
 }
 
+// @Summary Get all restaurant
+// @Description Geting all restaurant
+// @Tags Restaurant
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]string
+// @Failure 401 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /restaurant/ [get]
 func (r *reservationHandlerImpl) GetRestaurants(ctx *gin.Context) {
 	getRestReq := rese.GetRestaurantsRequest{}
 
@@ -47,6 +57,17 @@ func (r *reservationHandlerImpl) GetRestaurants(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "Restaurants retrieved successfully", "restaurants": getRestRes})
 }
 
+// @Summary Get restaurant by ID
+// @Description Get restaurant information using restaurant ID
+// @Tags Restaurant
+// @Accept  json
+// @Produce  json
+// @Param id path string true "Restaurant ID"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /restaurant/{id} [get]
 func (r *reservationHandlerImpl) GetRestaurant(ctx *gin.Context) {
 	id := ctx.Param("id")
 
@@ -60,6 +81,18 @@ func (r *reservationHandlerImpl) GetRestaurant(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "Restaurant retrieved successfully", "restaurant": getRestRes})
 }
 
+// @Summary Update restaurant by ID
+// @Description Update restaurant information using restaurant ID
+// @Tags Restaurant
+// @Accept  json
+// @Produce  json
+// @Param id path string true "Restaurant ID"
+// @Param UpdateRestaurantRequest body reservation_service.UpdateRestaurantRequest true "Updating restaurant"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /restaurant/{id} [put]
 func (r *reservationHandlerImpl) UpdateRestaurant(ctx *gin.Context) {
 	id := ctx.Param("id")
 
