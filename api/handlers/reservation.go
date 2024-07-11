@@ -36,7 +36,6 @@ func (r *reservationHandlerImpl) CreateReservation(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, gin.H{"message": "Reservation added successfully", "reservation": addResRes})
 }
 
-
 // @Summary Get all reservation
 // @Description Geting all reservation
 // @Tags Reservation
@@ -69,7 +68,7 @@ func (r *reservationHandlerImpl) GetReservation(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, gin.H{"message": "Reservation retrieved successfully", "reservation": getResRes})
+	ctx.JSON(http.StatusOK, gin.H{"message": "Reservation retrieved successfully", "reservation": getResRes.Reservation})
 }
 
 func (r *reservationHandlerImpl) UpdateReservation(ctx *gin.Context) {
