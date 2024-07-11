@@ -114,6 +114,17 @@ func (r *reservationHandlerImpl) UpdateRestaurant(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "Restaurant updated successfully", "restaurant": updateRestRes})
 }
 
+// @Summary Delete restaurant by ID
+// @Description Delete restaurant information using restaurant ID
+// @Tags Restaurant
+// @Accept  json
+// @Produce  json
+// @Param id path string true "Restaurant ID"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /restaurant/{id} [delete]
 func (r *reservationHandlerImpl) DeleteRestaurant(ctx *gin.Context) {
 	id := ctx.Param("id")
 
