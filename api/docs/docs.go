@@ -200,8 +200,8 @@ const docTemplate = `{
             }
         },
         "/reservation/": {
-            "get": {
-                "description": "Geting all reservation",
+            "post": {
+                "description": "Adding new reservation",
                 "consumes": [
                     "application/json"
                 ],
@@ -211,7 +211,18 @@ const docTemplate = `{
                 "tags": [
                     "Reservation"
                 ],
-                "summary": "Get all reservation",
+                "summary": "Add new reservation",
+                "parameters": [
+                    {
+                        "description": "Creating new reservation",
+                        "name": "AddReservationRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/reservation_service.AddReservationRequest"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -248,9 +259,11 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
+            }
+        },
+        "/reservation/check": {
             "post": {
-                "description": "Adding new reservation",
+                "description": "Can check Reservation availability via ids",
                 "consumes": [
                     "application/json"
                 ],
@@ -260,15 +273,77 @@ const docTemplate = `{
                 "tags": [
                     "Reservation"
                 ],
-                "summary": "Add new reservation",
+                "summary": "Checking Reservation Availability",
                 "parameters": [
                     {
-                        "description": "Creating new reservation",
-                        "name": "AddReservationRequest",
+                        "description": "Check Reservation",
+                        "name": "check",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/reservation_service.AddReservationRequest"
+                            "$ref": "#/definitions/models.CheckReservationFilter"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/reservation/getall": {
+            "post": {
+                "description": "Geting all reservation",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reservation"
+                ],
+                "summary": "Get all reservation",
+                "parameters": [
+                    {
+                        "description": "Get all reservation",
+                        "name": "GetReservationsRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/reservation_service.GetReservationsRequest"
                         }
                     }
                 ],
@@ -645,6 +720,17 @@ const docTemplate = `{
                 }
             }
         },
+        "models.CheckReservationFilter": {
+            "type": "object",
+            "properties": {
+                "reservation_id string": {
+                    "type": "string"
+                },
+                "user_id string": {
+                    "type": "string"
+                }
+            }
+        },
         "reservation_service.AddReservationRequest": {
             "type": "object",
             "properties": {
@@ -675,6 +761,20 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "phone_number": {
+                    "type": "string"
+                }
+            }
+        },
+        "reservation_service.GetReservationsRequest": {
+            "type": "object",
+            "properties": {
+                "restaurant_id": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "user_id": {
                     "type": "string"
                 }
             }

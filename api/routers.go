@@ -58,7 +58,7 @@ func (s *Server) InitRoutes(r *gin.Engine) {
 		reservationGroup.GET("/:id", reservation.GetReservation)
 		reservationGroup.PUT("/:id", reservation.UpdateReservation)
 		reservationGroup.DELETE("/:id", reservation.DeleteReservation)
-		reservationGroup.GET("/", reservation.GetReservations)
+		reservationGroup.POST("/getall", reservation.GetReservations)
 		reservationGroup.POST("/check", reservation.CheckReservation)
 		reservationGroup.POST("/order", reservation.CreateReservationOrder)
 	}
