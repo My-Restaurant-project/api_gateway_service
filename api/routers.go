@@ -3,15 +3,16 @@ package api
 import (
 	_ "api_gateway/api/docs"
 	handler "api_gateway/api/handlers"
-	"api_gateway/api/middlewares"
 
 	"github.com/gin-gonic/gin"
+	files "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // @title Restaurant Reservation System API
 // @version 1.0
 // @description This is a sample server for a restaurant reservation system.
-// @host localhost:8070
+// @host localhost:8080
 type Server struct {
 	Handlers handler.Handlers
 }
@@ -21,6 +22,8 @@ func NewServer(hands handler.Handlers) *Server {
 }
 
 func (s *Server) InitRoutes(r *gin.Engine) {
+	r.GET("swagger/*any", ginSwagger.WrapHandler(files.Handler))
+
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{"message": "pong"})
 	})
@@ -35,8 +38,8 @@ func (s *Server) InitRoutes(r *gin.Engine) {
 
 	r.Use(gin.Recovery())
 	r.Use(gin.Logger())
+	// r.Use(middlewares.JWTMiddlewares)
 
-	r.Use(middlewares.JWTMiddlewares)
 	r.GET("/auth/profile/:id", auth.GetProfileId)
 
 	reservation := s.Handlers.Reservation()

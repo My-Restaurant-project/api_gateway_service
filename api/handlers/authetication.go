@@ -35,28 +35,24 @@ func NewAuthHandler(authSer auth.AuthenticationServiceClient) AuthHandler {
 
 // @Summary Login and Getting Token
 // @Description User inserts their credentials like email and password
-// @Tags Login
+// @Tags Authentication
 // @Accept  json
 // @Produce  json
-// @Param email body string true "example@gmail.com"
-// @Param password body string true "exmaplePassword2024"
+// @Param LoginRequest body authentication_service.LoginRequest true "example@gmail.com"
 // @Success 200 {object} map[string]interface{}
 // @Failure 400 {object} map[string]string
 // @Failure 401 {object} map[string]string
 // @Failure 500 {object} map[string]string
 // @Router /auth/login [post]
 func (h *authHandlerImpl) Login(c *gin.Context) {
-	var req struct {
-		Email    string `json:"email" binding:"required,email"`
-		Password string `json:"password" binding:"required,min=6"`
-	}
+	var req auth.LoginRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request format"})
 		return
 	}
 
-	user, err := h.authService.Login(context.Background(), &auth.LoginRequest{Password: req.Password, Email: req.Email})
+	user, err := h.authService.Login(context.Background(), &req)
 	if err != nil {
 		switch {
 		case errors.Is(err, errors.New("ErrorInvalid credentials")):
@@ -83,6 +79,17 @@ func (h *authHandlerImpl) Login(c *gin.Context) {
 	})
 }
 
+// @Summary Register user with credentials
+// @Description User inserts their credentials
+// @Tags Authentication
+// @Accept  json
+// @Produce  json
+// @Param profile body authentication_service.Profile true "registering"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]string
+// @Failure 401 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /auth/register [post]
 func (h *authHandlerImpl) Register(c *gin.Context) {
 	var req auth.RegisterRequest
 	var profile auth.Profile
@@ -138,9 +145,19 @@ func (h *authHandlerImpl) validateRegisterRequest(req *auth.RegisterRequest) err
 	return nil
 }
 
+// @Summary Get profile by ID
+// @Description Retrieve user profile information using user ID
+// @Tags Profile
+// @Accept  json
+// @Produce  json
+// @Param id path string true "User ID"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /auth/profile/{id} [get]
 func (h *authHandlerImpl) GetProfileId(c *gin.Context) {
 	id := c.Param("id")
-	log.Println(id)
 	if id == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
 		return
