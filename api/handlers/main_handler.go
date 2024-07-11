@@ -68,6 +68,17 @@ type ReservationHandler interface {
 	DeleteMenu(c *gin.Context)
 }
 
+// @Summary Add new order for reservation
+// @Description Adding new order for reservation
+// @Tags Reservation
+// @Accept  json
+// @Produce  json
+// @Param AddReservationOrderRequest body reservation_service.AddReservationOrderRequest true "Creating new order"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]string
+// @Failure 401 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /reservation/order [post]
 func (r *reservationHandlerImpl) CreateReservationOrder(ctx *gin.Context) {
 	var resOrderReq rese.AddReservationOrderRequest
 
@@ -82,5 +93,7 @@ func (r *reservationHandlerImpl) CreateReservationOrder(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{"message": "Reservation order added successfully", "reservation_order": resOrderRes})
+
 }
+
 func (r *reservationHandlerImpl) PayForReservation(ctx *gin.Context) {}

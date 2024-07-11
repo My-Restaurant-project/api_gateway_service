@@ -1,0 +1,936 @@
+definitions:
+  authentication_service.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  authentication_service.Profile:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      role:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.CheckReservationFilter:
+    properties:
+      reservation_id string:
+        type: string
+      user_id string:
+        type: string
+    type: object
+  reservation_service.AddMenuRequest:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      price:
+        type: string
+      restaurant_id:
+        type: string
+    type: object
+  reservation_service.AddReservationOrderRequest:
+    properties:
+      menu_item_id:
+        type: string
+      quantity:
+        type: integer
+      reservation_id:
+        type: string
+    type: object
+  reservation_service.AddReservationRequest:
+    properties:
+      reservation_time:
+        type: string
+      restaurant_id:
+        type: string
+      status:
+        type: string
+      user_id:
+        type: string
+    type: object
+  reservation_service.AddRestaurantRequest:
+    properties:
+      address:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      phone_number:
+        type: string
+    type: object
+  reservation_service.GetReservationsRequest:
+    properties:
+      restaurant_id:
+        type: string
+      status:
+        type: string
+      user_id:
+        type: string
+    type: object
+  reservation_service.UpdateMenuRequest:
+    properties:
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      price:
+        type: string
+      restaurant_id:
+        type: string
+    type: object
+  reservation_service.UpdateReservationRequest:
+    properties:
+      id:
+        type: string
+      reservation_time:
+        type: string
+      restaurant_id:
+        type: string
+      status:
+        type: string
+      user_id:
+        type: string
+    type: object
+  reservation_service.UpdateRestaurantRequest:
+    properties:
+      address:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      phone_number:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a sample server for a restaurant reservation system.
+  title: Restaurant Reservation System API
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: User inserts their credentials like email and password
+      parameters:
+      - description: example@gmail.com
+        in: body
+        name: LoginRequest
+        required: true
+        schema:
+          $ref: '#/definitions/authentication_service.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Login and Getting Token
+      tags:
+      - Authentication
+  /auth/profile/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve user profile information using user ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get profile by ID
+      tags:
+      - Profile
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: User inserts their credentials
+      parameters:
+      - description: registering
+        in: body
+        name: profile
+        required: true
+        schema:
+          $ref: '#/definitions/authentication_service.Profile'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Register user with credentials
+      tags:
+      - Authentication
+  /menu/:
+    get:
+      consumes:
+      - application/json
+      description: Geting all menu
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get all menu
+      tags:
+      - Menu
+    post:
+      consumes:
+      - application/json
+      description: Adding new menu
+      parameters:
+      - description: Creating new menu
+        in: body
+        name: AddMenuRequest
+        required: true
+        schema:
+          $ref: '#/definitions/reservation_service.AddMenuRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Add new menu
+      tags:
+      - Menu
+  /menu/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete menu information using menu ID
+      parameters:
+      - description: Menu ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete menu by ID
+      tags:
+      - Menu
+    get:
+      consumes:
+      - application/json
+      description: Get menu information using menu ID
+      parameters:
+      - description: Menu ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get menu by ID
+      tags:
+      - Menu
+    put:
+      consumes:
+      - application/json
+      description: Update menu information using menu ID
+      parameters:
+      - description: Menu ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updating menu
+        in: body
+        name: UpdateMenuRequest
+        required: true
+        schema:
+          $ref: '#/definitions/reservation_service.UpdateMenuRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update menu by ID
+      tags:
+      - Menu
+  /reservation/:
+    post:
+      consumes:
+      - application/json
+      description: Adding new reservation
+      parameters:
+      - description: Creating new reservation
+        in: body
+        name: AddReservationRequest
+        required: true
+        schema:
+          $ref: '#/definitions/reservation_service.AddReservationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Add new reservation
+      tags:
+      - Reservation
+  /reservation/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete reservation information using reservation ID
+      parameters:
+      - description: Reservation ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete reservation by ID
+      tags:
+      - Reservation
+    get:
+      consumes:
+      - application/json
+      description: Get reservation information using reservation ID
+      parameters:
+      - description: Reservation ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get reservation by ID
+      tags:
+      - Reservation
+    put:
+      consumes:
+      - application/json
+      description: Update reservation information using reservation ID
+      parameters:
+      - description: Reservation ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updating reservation
+        in: body
+        name: UpdateReservationRequest
+        required: true
+        schema:
+          $ref: '#/definitions/reservation_service.UpdateReservationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update reservation by ID
+      tags:
+      - Reservation
+  /reservation/check:
+    post:
+      consumes:
+      - application/json
+      description: Can check Reservation availability via ids
+      parameters:
+      - description: Check Reservation
+        in: body
+        name: check
+        required: true
+        schema:
+          $ref: '#/definitions/models.CheckReservationFilter'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Checking Reservation Availability
+      tags:
+      - Reservation
+  /reservation/getall:
+    post:
+      consumes:
+      - application/json
+      description: Geting all reservation
+      parameters:
+      - description: Get all reservation
+        in: body
+        name: GetReservationsRequest
+        required: true
+        schema:
+          $ref: '#/definitions/reservation_service.GetReservationsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get all reservation
+      tags:
+      - Reservation
+  /reservation/order:
+    post:
+      consumes:
+      - application/json
+      description: Adding new order for reservation
+      parameters:
+      - description: Creating new order
+        in: body
+        name: AddReservationOrderRequest
+        required: true
+        schema:
+          $ref: '#/definitions/reservation_service.AddReservationOrderRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Add new order for reservation
+      tags:
+      - Reservation
+  /restaurant/:
+    get:
+      consumes:
+      - application/json
+      description: Geting all restaurant
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get all restaurant
+      tags:
+      - Restaurant
+    post:
+      consumes:
+      - application/json
+      description: Adding new restaurant
+      parameters:
+      - description: Creating new restaurnat
+        in: body
+        name: AddRestaurantRequest
+        required: true
+        schema:
+          $ref: '#/definitions/reservation_service.AddRestaurantRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Add new restaurant
+      tags:
+      - Restaurant
+  /restaurant/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete restaurant information using restaurant ID
+      parameters:
+      - description: Restaurant ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete restaurant by ID
+      tags:
+      - Restaurant
+    get:
+      consumes:
+      - application/json
+      description: Get restaurant information using restaurant ID
+      parameters:
+      - description: Restaurant ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get restaurant by ID
+      tags:
+      - Restaurant
+    put:
+      consumes:
+      - application/json
+      description: Update restaurant information using restaurant ID
+      parameters:
+      - description: Restaurant ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updating restaurant
+        in: body
+        name: UpdateRestaurantRequest
+        required: true
+        schema:
+          $ref: '#/definitions/reservation_service.UpdateRestaurantRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update restaurant by ID
+      tags:
+      - Restaurant
+swagger: "2.0"
