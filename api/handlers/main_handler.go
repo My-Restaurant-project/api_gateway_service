@@ -1,9 +1,9 @@
 package handler
 
 import (
-	"api_gateway/api/models"
 	auth "api_gateway/genproto/authentication_service"
 	rese "api_gateway/genproto/reservation_service"
+	"context"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -68,53 +68,19 @@ type ReservationHandler interface {
 	DeleteMenu(c *gin.Context)
 }
 
-// @Summary Checking Reservation Availability
-// @Description Can check Reservation availability via ids
-// @Tags Reservation
-// @Accept  json
-// @Produce  json
-// @Param check body models.CheckReservationFilter true "Check Reservation"
-// @Success 200 {object} map[string]interface{}
-// @Failure 400 {object} map[string]string
-// @Failure 401 {object} map[string]string
-// @Failure 500 {object} map[string]string
-// @Router /reservation/check [post]
-func (r *reservationHandlerImpl) CheckReservation(ctx *gin.Context) {
-	var checkReser models.CheckReservationFilter
-	var reserReq rese.GetReservationRequest
+func (r *reservationHandlerImpl) CreateReservationOrder(ctx *gin.Context) {
+	var resOrderReq rese.AddReservationOrderRequest
 
-	err := ctx.ShouldBindJSON(checkReser)
+	if ctx.ShouldBindJSON(&resOrderReq) != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request format"})
+		return
+	}
+
+	resOrderRes, err := r.reservationService.AddReservationOrder(context.TODO(), &resOrderReq)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"error": "Invalid format input: " + err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	reserReq.Id = checkReser.ReservationID
-
-	reserRes, err := r.reservationService.GetReservation(ctx, &reserReq)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Reservation not found: " + err.Error()})
-		return
-	}
-
-	if reserRes.Reservation == nil {
-		ctx.JSON(http.StatusOK, gin.H{"error": "Reservation not found"})
-		return
-	}
-
-	if reserRes.Reservation.GetStatus() == "inactive" {
-		ctx.JSON(http.StatusOK, gin.H{"error": "Reservation is not active"})
-		return
-	}
-
-	ctx.JSON(http.StatusOK, gin.H{"message": "Reservation is available", "reservation": reserRes.Reservation})
-
+	ctx.JSON(http.StatusOK, gin.H{"message": "Reservation order added successfully", "reservation_order": resOrderRes})
 }
-
-func (r *reservationHandlerImpl) CreateReservationOrder(ctx *gin.Context) {}
-func (r *reservationHandlerImpl) PayForReservation(ctx *gin.Context)      {}
-
-// func (r *reservationHandlerImpl) AddMenu(ctx *gin.Context)    {}
-// func (r *reservationHandlerImpl) GetMenus(ctx *gin.Context)   {}
-// func (r *reservationHandlerImpl) GetMenu(ctx *gin.Context)    {}
-// func (r *reservationHandlerImpl) UpdateMenu(ctx *gin.Context) {}
-// func (r *reservationHandlerImpl) DeleteMenu(ctx *gin.Context) {}
+func (r *reservationHandlerImpl) PayForReservation(ctx *gin.Context) {}

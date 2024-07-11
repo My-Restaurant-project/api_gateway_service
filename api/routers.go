@@ -3,7 +3,6 @@ package api
 import (
 	_ "api_gateway/api/docs"
 	handler "api_gateway/api/handlers"
-
 	"github.com/gin-gonic/gin"
 	files "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"

@@ -30,13 +30,6 @@ definitions:
       user_id string:
         type: string
     type: object
-  models.CheckReservationFilter:
-    properties:
-      reservation_id string:
-        type: string
-      user_id string:
-        type: string
-    type: object
   reservation_service.AddReservationRequest:
     properties:
       reservation_time:
@@ -224,46 +217,6 @@ paths:
       tags:
       - Authentication
   /reservation/:
-    get:
-      consumes:
-      - application/json
-      description: Geting all reservation
-      parameters:
-      - description: Get all reservation
-        in: body
-        name: GetReservationsRequest
-        required: true
-        schema:
-          $ref: '#/definitions/reservation_service.GetReservationsRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            additionalProperties: true
-            type: object
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "401":
-          description: Unauthorized
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Get all reservation
-      tags:
-      - Reservation
     post:
       consumes:
       - application/json
@@ -467,6 +420,47 @@ paths:
               type: string
             type: object
       summary: Checking Reservation Availability
+      tags:
+      - Reservation
+  /reservation/getall:
+    post:
+      consumes:
+      - application/json
+      description: Geting all reservation
+      parameters:
+      - description: Get all reservation
+        in: body
+        name: GetReservationsRequest
+        required: true
+        schema:
+          $ref: '#/definitions/reservation_service.GetReservationsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get all reservation
       tags:
       - Reservation
   /restaurant/:

@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"api_gateway/api/models"
 	rese "api_gateway/genproto/reservation_service"
 	"context"
 	"net/http"
@@ -88,7 +89,7 @@ func (r *reservationHandlerImpl) GetReservation(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "Reservation retrieved successfully", "reservation": getResRes.Reservation})
 }
 
-//@ 
+// @
 // @Summary Update reservation by ID
 // @Description Update reservation information using reservation ID
 // @Tags Reservation
@@ -143,4 +144,46 @@ func (r *reservationHandlerImpl) DeleteReservation(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{"message": "Reservation deleted successfully"})
+}
+
+// @Summary Checking Reservation Availability
+// @Description Can check Reservation availability via ids
+// @Tags Reservation
+// @Accept  json
+// @Produce  json
+// @Param check body models.CheckReservationFilter true "Check Reservation"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]string
+// @Failure 401 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /reservation/check [post]
+func (r *reservationHandlerImpl) CheckReservation(ctx *gin.Context) {
+	var checkReser models.CheckReservationFilter
+	var reserReq rese.GetReservationRequest
+
+	err := ctx.ShouldBindJSON(&checkReser)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"error": "Invalid format input: " + err.Error()})
+		return
+	}
+	reserReq.Id = checkReser.ReservationID
+
+	reserRes, err := r.reservationService.GetReservation(ctx, &reserReq)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Reservation not found: " + err.Error()})
+		return
+	}
+
+	if reserRes.Reservation == nil {
+		ctx.JSON(http.StatusOK, gin.H{"error": "Reservation not found"})
+		return
+	}
+
+	if reserRes.Reservation.GetStatus() == "inactive" {
+		ctx.JSON(http.StatusOK, gin.H{"error": "Reservation is not active"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "Reservation is available", "reservation": reserRes.Reservation})
+
 }
