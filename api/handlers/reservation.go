@@ -8,6 +8,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Add new reservation
+// @Description Adding new reservation
+// @Tags Reservation
+// @Accept  json
+// @Produce  json
+// @Param AddReservationRequest body reservation_service.AddReservationRequest true "Creating new reservation"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]string
+// @Failure 401 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /reservation/ [post]
 func (r *reservationHandlerImpl) CreateReservation(ctx *gin.Context) {
 	var addResReq rese.AddReservationRequest
 
@@ -25,6 +36,18 @@ func (r *reservationHandlerImpl) CreateReservation(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, gin.H{"message": "Reservation added successfully", "reservation": addResRes})
 }
 
+
+// @Summary Get all reservation
+// @Description Geting all reservation
+// @Tags Reservation
+// @Accept  json
+// @Produce  json
+// @Param GetReservationsRequest body reservation_service.GetReservationsRequest true "Get all reservation"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]string
+// @Failure 401 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /reservation/ [get]
 func (r *reservationHandlerImpl) GetReservations(ctx *gin.Context) {
 	getResReq := rese.GetReservationsRequest{}
 
