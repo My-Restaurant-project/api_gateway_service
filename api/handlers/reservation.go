@@ -36,7 +36,6 @@ func (r *reservationHandlerImpl) CreateReservation(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, gin.H{"message": "Reservation added successfully", "reservation": addResRes})
 }
 
-
 // @Summary Get all reservation
 // @Description Geting all reservation
 // @Tags Reservation
@@ -47,9 +46,14 @@ func (r *reservationHandlerImpl) CreateReservation(ctx *gin.Context) {
 // @Failure 400 {object} map[string]string
 // @Failure 401 {object} map[string]string
 // @Failure 500 {object} map[string]string
-// @Router /reservation/ [get]
+// @Router /reservation/getall [post]
 func (r *reservationHandlerImpl) GetReservations(ctx *gin.Context) {
 	getResReq := rese.GetReservationsRequest{}
+
+	if err := ctx.ShouldBindJSON(&getResReq); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request format: " + err.Error()})
+		return
+	}
 
 	getResRes, err := r.reservationService.GetReservations(context.TODO(), &getResReq)
 	if err != nil {
@@ -81,7 +85,7 @@ func (r *reservationHandlerImpl) GetReservation(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, gin.H{"message": "Reservation retrieved successfully", "reservation": getResRes})
+	ctx.JSON(http.StatusOK, gin.H{"message": "Reservation retrieved successfully", "reservation": getResRes.Reservation})
 }
 
 //@ 

@@ -30,6 +30,13 @@ definitions:
       user_id string:
         type: string
     type: object
+  models.CheckReservationFilter:
+    properties:
+      reservation_id string:
+        type: string
+      user_id string:
+        type: string
+    type: object
   reservation_service.AddReservationRequest:
     properties:
       reservation_time:

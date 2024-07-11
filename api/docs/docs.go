@@ -914,6 +914,17 @@ const docTemplate = `{
                 }
             }
         },
+        "models.CheckReservationFilter": {
+            "type": "object",
+            "properties": {
+                "reservation_id string": {
+                    "type": "string"
+                },
+                "user_id string": {
+                    "type": "string"
+                }
+            }
+        },
         "reservation_service.AddReservationRequest": {
             "type": "object",
             "properties": {
