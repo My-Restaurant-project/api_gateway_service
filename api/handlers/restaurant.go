@@ -46,6 +46,7 @@ func (r *reservationHandlerImpl) GetRestaurants(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, gin.H{"message": "Restaurants retrieved successfully", "restaurants": getRestRes})
 }
+
 func (r *reservationHandlerImpl) GetRestaurant(ctx *gin.Context) {
 	id := ctx.Param("id")
 
