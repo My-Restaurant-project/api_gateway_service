@@ -23,6 +23,17 @@ definitions:
       updated_at:
         type: string
     type: object
+  reservation_service.AddReservationRequest:
+    properties:
+      reservation_time:
+        type: string
+      restaurant_id:
+        type: string
+      status:
+        type: string
+      user_id:
+        type: string
+    type: object
   reservation_service.AddRestaurantRequest:
     properties:
       address:
@@ -176,6 +187,80 @@ paths:
       summary: Register user with credentials
       tags:
       - Authentication
+  /reservation/:
+    get:
+      consumes:
+      - application/json
+      description: Geting all reservation
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get all reservation
+      tags:
+      - Reservation
+    post:
+      consumes:
+      - application/json
+      description: Adding new reservation
+      parameters:
+      - description: Creating new reservation
+        in: body
+        name: AddReservationRequest
+        required: true
+        schema:
+          $ref: '#/definitions/reservation_service.AddReservationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Add new reservation
+      tags:
+      - Reservation
   /restaurant/:
     get:
       consumes:
