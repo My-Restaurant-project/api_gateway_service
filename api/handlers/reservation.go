@@ -33,7 +33,7 @@ func (r *reservationHandlerImpl) GetReservations(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, gin.H{"message": "Reservations retrieved successfully", "reservations": getResRes})
+	ctx.JSON(http.StatusOK, gin.H{"message": "Reservations retrieved successfully", "reservations": getResRes.Reservations})
 }
 
 func (r *reservationHandlerImpl) GetReservation(ctx *gin.Context) {
@@ -66,7 +66,7 @@ func (r *reservationHandlerImpl) UpdateReservation(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, gin.H{"message": "Reservation updated successfully", "reservation": updateResRes})
+	ctx.JSON(http.StatusOK, gin.H{"message": "Reservation updated successfully", "reservation": updateResRes.Reservation})
 }
 
 func (r *reservationHandlerImpl) DeleteReservation(ctx *gin.Context) {

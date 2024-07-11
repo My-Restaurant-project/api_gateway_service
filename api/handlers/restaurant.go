@@ -54,7 +54,7 @@ func (r *reservationHandlerImpl) GetRestaurants(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, gin.H{"message": "Restaurants retrieved successfully", "restaurants": getRestRes})
+	ctx.JSON(http.StatusOK, gin.H{"message": "Restaurants retrieved successfully", "restaurants": getRestRes.Restaurant})
 }
 
 // @Summary Get restaurant by ID
@@ -78,7 +78,7 @@ func (r *reservationHandlerImpl) GetRestaurant(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, gin.H{"message": "Restaurant retrieved successfully", "restaurant": getRestRes})
+	ctx.JSON(http.StatusOK, gin.H{"message": "Restaurant retrieved successfully", "restaurant": getRestRes.Restaurant})
 }
 
 // @Summary Update restaurant by ID
@@ -111,7 +111,7 @@ func (r *reservationHandlerImpl) UpdateRestaurant(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, gin.H{"message": "Restaurant updated successfully", "restaurant": updateRestRes})
+	ctx.JSON(http.StatusOK, gin.H{"message": "Restaurant updated successfully", "restaurant": updateRestRes.Restaurant})
 }
 
 // @Summary Delete restaurant by ID
