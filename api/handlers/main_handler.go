@@ -2,6 +2,7 @@ package handler
 
 import (
 	auth "api_gateway/genproto/authentication_service"
+	payment "api_gateway/genproto/payment_service"
 	rese "api_gateway/genproto/reservation_service"
 	"context"
 	"net/http"
@@ -12,17 +13,20 @@ import (
 type Handlers interface {
 	Auth() AuthHandler
 	Reservation() ReservationHandler
+	Payment() PaymentHandler
 }
 
 type handlers struct {
 	authHandler        AuthHandler
 	reservationHandler ReservationHandler
+	paymentHandler     PaymentHandler
 }
 
-func NewHandlers(authSer auth.AuthenticationServiceClient, reser rese.ReservationServiceClient) Handlers {
+func NewHandlers(authSer auth.AuthenticationServiceClient, reser rese.ReservationServiceClient, pay payment.PaymentServiceClient) Handlers {
 	return &handlers{
 		authHandler:        NewAuthHandler(authSer),
 		reservationHandler: NewReservationHandler(reser),
+		paymentHandler:     NewPaymentHandler(pay),
 	}
 }
 
@@ -33,6 +37,12 @@ func (h *handlers) Auth() AuthHandler {
 func (h *handlers) Reservation() ReservationHandler {
 	return h.reservationHandler
 }
+
+func (h *handlers) Payment() PaymentHandler {
+	return h.paymentHandler
+}
+
+// Reservation Handler Implementation
 
 type reservationHandlerImpl struct {
 	reservationService rese.ReservationServiceClient
@@ -49,7 +59,7 @@ type ReservationHandler interface {
 	UpdateRestaurant(*gin.Context)
 	DeleteRestaurant(*gin.Context)
 
-	//Reservation
+	// Reservation
 	CreateReservation(c *gin.Context)
 	GetReservations(c *gin.Context)
 	GetReservation(c *gin.Context)
@@ -60,7 +70,7 @@ type ReservationHandler interface {
 	CreateReservationOrder(c *gin.Context)
 	PayForReservation(c *gin.Context)
 
-	//Menu
+	// Menu
 	AddMenu(c *gin.Context)
 	GetMenus(c *gin.Context)
 	GetMenu(c *gin.Context)

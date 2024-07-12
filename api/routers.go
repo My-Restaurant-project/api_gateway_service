@@ -3,6 +3,7 @@ package api
 import (
 	_ "api_gateway/api/docs"
 	handler "api_gateway/api/handlers"
+
 	"github.com/gin-gonic/gin"
 	files "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -70,4 +71,13 @@ func (s *Server) InitRoutes(r *gin.Engine) {
 		menuGroup.GET("/", reservation.GetMenus)
 	}
 
+	// Payment endpoints
+	payment := s.Handlers.Payment()
+
+	paymentGroup := r.Group("/payment")
+	{
+		paymentGroup.POST("/", payment.CreatePayment)
+		paymentGroup.GET("/:id", payment.GetPayment)
+		paymentGroup.PUT("/:id", payment.UpdatePayment)
+	}
 }

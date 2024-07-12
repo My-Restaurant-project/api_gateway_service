@@ -30,6 +30,33 @@ definitions:
       user_id string:
         type: string
     type: object
+  payment_service.CreatePaymentRequest:
+    properties:
+      payment:
+        $ref: '#/definitions/payment_service.Payment'
+    type: object
+  payment_service.Payment:
+    properties:
+      amount:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      payment_method:
+        type: string
+      payment_status:
+        type: string
+      reservation_id:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  payment_service.UpdatePaymentRequest:
+    properties:
+      payment:
+        $ref: '#/definitions/payment_service.Payment'
+    type: object
   reservation_service.AddMenuRequest:
     properties:
       description:
@@ -447,6 +474,226 @@ paths:
       summary: Update menu by ID
       tags:
       - Menu
+  /payment/:
+    post:
+      consumes:
+      - application/json
+      description: Adding new payment
+      parameters:
+      - description: Creating new payment
+        in: body
+        name: AddPaymentRequest
+        required: true
+        schema:
+          $ref: '#/definitions/payment_service.CreatePaymentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Add new payment
+      tags:
+      - Payment
+  /payment/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete payment information using payment ID
+      parameters:
+      - description: Payment ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete payment by ID
+      tags:
+      - Payment
+    get:
+      consumes:
+      - application/json
+      description: Get payment information using payment ID
+      parameters:
+      - description: Payment ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get payment by ID
+      tags:
+      - Payment
+    put:
+      consumes:
+      - application/json
+      description: Update payment information using payment ID
+      parameters:
+      - description: Payment ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updating payment
+        in: body
+        name: UpdatePaymentRequest
+        required: true
+        schema:
+          $ref: '#/definitions/payment_service.UpdatePaymentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update payment by ID
+      tags:
+      - Payment
+  /payments/:
+    get:
+      consumes:
+      - application/json
+      description: List payments
+      parameters:
+      - description: Reservation ID
+        in: query
+        name: reservation_id
+        type: string
+      - description: Payment Method
+        in: query
+        name: payment_method
+        type: string
+      - description: Payment Status
+        in: query
+        name: payment_status
+        type: string
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: List payments
+      tags:
+      - Payment
   /reservation/:
     post:
       consumes:
